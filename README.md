@@ -167,7 +167,7 @@ flowchart TD
 ```mermaid
 flowchart TD
     A["Input PDF Document (.pdf)"] --> B["1. PDF Triage & Engine Selection (pdf_triage.py)"]
-    B -->|pymupdf4llm (Default)| C1["Fast Text & Layout Extraction"]
+    B -->|"pymupdf4llm (Default)"| C1["Fast Text & Layout Extraction"]
     B -->|docling (Complex Math/Tables)| C2["High-Fidelity LaTeX & Table Extraction"]
     C1 & C2 --> D["Output: <base_dir>/<note_name>/<note_name>_source.md"]
     D --> E["2. Pedagogical Synthesis & Structuring"]
