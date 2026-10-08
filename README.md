@@ -471,5 +471,3 @@ python scripts/phonetic_repair.py "C:\Users\User\Desktop\Summarizer\Lecture_01\L
   - Run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` in your PowerShell window, then reactivate `.\.venv\Scripts\Activate.ps1`.
 
 ---
-
-*Authored for the Antigravity Autonomous Knowledge & Engineering Ecosystem.*
