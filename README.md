@@ -42,36 +42,44 @@ The Summarizer Skill is engineered around a modular, local-first processing arch
 
 ```mermaid
 graph TD
-    subgraph Input Layer
-        A1[Audio / Video File]
-        A2[Research PDF / Book]
-        A3[Slide Deck / Visuals]
-        A4[Direct Chat Upload]
+    subgraph InputLayer ["Input Layer"]
+        A1["Audio or Video File"]
+        A2["Research PDF or Book"]
+        A3["Slide Deck or Visuals"]
+        A4["Direct Chat Upload"]
     end
 
-    subgraph Preprocessing & Extraction Layer
-        B1["audio_preprocessor.py<br>(ffmpeg bandpass & afftdn)"]
-        B2["pdf_to_markdown.py<br>(pymupdf4llm / docling)"]
-        B3["pdf_to_images.py<br>(fitz 150 DPI render)"]
-        B4[Session Upload Resolver]
+    subgraph PreprocessingLayer ["Preprocessing and Extraction Layer"]
+        B1["audio_preprocessor.py - ffmpeg bandpass and afftdn"]
+        B2["pdf_to_markdown.py - pymupdf4llm or docling"]
+        B3["pdf_to_images.py - fitz 150 DPI render"]
+        B4["Session Upload Resolver"]
     end
 
-    subgraph Inference & Processing Engine
-        C1["pywhispercpp<br>(whisper.cpp C++ GGML Engine)"]
-        C2["Deterministic Phonetic Repair<br>(phonetic_repair.py)"]
+    subgraph InferenceEngine ["Inference and Processing Engine"]
+        C1["pywhispercpp - whisper.cpp C++ GGML Engine"]
+        C2["Deterministic Phonetic Repair - phonetic_repair.py"]
     end
 
-    subgraph Output & Synthesis Layer
-        D1["~/Desktop/Summarizer/<note_name>/"]
-        D2["<note_name>.md (Academic Synthesis)"]
-        D3["Transcripts & Slides Assets"]
+    subgraph OutputLayer ["Output and Synthesis Layer"]
+        D1["Summarizer Output Directory - note_name"]
+        D2["note_name.md - Academic Synthesis"]
+        D3["Transcripts and Slides Assets"]
     end
 
-    A1 --> B1 --> C1
-    A2 --> B2 --> D1
-    A3 --> B3 --> D1
-    A4 --> B4 --> B1 & B2 & B3
-    C1 --> C2 --> D3 --> D2
+    A1 --> B1
+    B1 --> C1
+    A2 --> B2
+    B2 --> D1
+    A3 --> B3
+    B3 --> D1
+    A4 --> B4
+    B4 --> B1
+    B4 --> B2
+    B4 --> B3
+    C1 --> C2
+    C2 --> D3
+    D3 --> D2
     B2 --> D2
     B3 --> D3
     D2 --> D1
@@ -126,12 +134,12 @@ When users upload audio, video, or PDF files directly into the chat interface, t
 
 ```mermaid
 flowchart TD
-    A["Raw Audio/Video File"] --> B["1. Acoustic Preprocessing (audio_preprocessor.py)"]
-    B -->|16kHz Mono WAV| C["2. whisper.cpp C++ Engine (pywhispercpp + whisper-large-v3-turbo-singlish)"]
-    C -->|Raw Segments| D["3. Deterministic Phonetic Repair (phonetic_repair.py)"]
-    D --> E["Generated Transcripts (.txt, .json, _annotated.md)"]
-    E --> F["4. Academic Zero-Loss Synthesis (LLM Agent)"]
-    F --> G["Final Synthesized Note: <note_name>.md"]
+    A["Raw Audio or Video File"] --> B["1. Acoustic Preprocessing - audio_preprocessor.py"]
+    B -->|16kHz Mono WAV| C["2. whisper.cpp C++ Engine - pywhispercpp and singlish model"]
+    C -->|Raw Segments| D["3. Deterministic Phonetic Repair - phonetic_repair.py"]
+    D --> E["Generated Transcripts: txt, json, annotated md"]
+    E --> F["4. Academic Zero-Loss Synthesis - LLM Agent"]
+    F --> G["Final Synthesized Note: note_name.md"]
 ```
 
 #### Step-by-Step Execution:
@@ -166,12 +174,13 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A["Input PDF Document (.pdf)"] --> B["1. PDF Triage & Engine Selection (pdf_triage.py)"]
-    B -->|"pymupdf4llm (Default)"| C1["Fast Text & Layout Extraction"]
-    B -->|docling (Complex Math/Tables)| C2["High-Fidelity LaTeX & Table Extraction"]
-    C1 & C2 --> D["Output: <base_dir>/<note_name>/<note_name>_source.md"]
-    D --> E["2. Pedagogical Synthesis & Structuring"]
-    E --> F["Final Synthesized Note: <note_name>.md"]
+    A["Input PDF Document - pdf"] --> B["1. PDF Triage and Engine Selection - pdf_triage.py"]
+    B -->|pymupdf4llm - Default| C1["Fast Text and Layout Extraction"]
+    B -->|docling - Complex Math and Tables| C2["High-Fidelity LaTeX and Table Extraction"]
+    C1 --> D["Output: note_name_source.md"]
+    C2 --> D
+    D --> E["2. Pedagogical Synthesis and Structuring"]
+    E --> F["Final Synthesized Note: note_name.md"]
 ```
 
 #### Step-by-Step Execution:
@@ -193,11 +202,11 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A["Input Slide Deck / Presentation (.pdf)"] --> B["1. Automatic Slide Extraction (pdf_to_images.py)"]
-    B -->|Rendered PNG Pages at 150 DPI| C["Output Directory: <base_dir>/<note_name>/slides/"]
-    C --> D["2. Multimodal Vision Ingestion & Diagram Analysis"]
-    D --> E["3. Cross-Correlation & Pedagogical Synthesis"]
-    E --> F["Final Synthesized Note: <note_name>.md"]
+    A["Input Slide Deck or Presentation - pdf"] --> B["1. Automatic Slide Extraction - pdf_to_images.py"]
+    B -->|Rendered PNG Pages at 150 DPI| C["Output Directory: note_name slides"]
+    C --> D["2. Multimodal Vision Ingestion and Diagram Analysis"]
+    D --> E["3. Cross-Correlation and Pedagogical Synthesis"]
+    E --> F["Final Synthesized Note: note_name.md"]
 ```
 
 #### Step-by-Step Execution:
